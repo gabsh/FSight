@@ -1,0 +1,85 @@
+services:
+
+  # ─── SEC Ingestor ─────────────────────────────────────────────
+  ingestor:
+    container_name: fsight-ingestor
+    build: ./sec-ingestor
+    restart: on-failure
+    depends_on:
+      qdrant:
+        condition: service_started
+    environment:
+      - QDRANT_HOST=qdrant
+      - QDRANT_PORT=6333
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+    volumes:
+      - docs:/app/docs
+    develop:
+      watch:
+        - action: sync+restart
+          path: ./sec-ingestor/app/ingestor.py
+          target: /app/ingestor.py
+    networks:
+      - fsight-network
+
+# ─── FastAPI ──────────────────────────────────────────────────
+  api:
+    container_name: fsight-api
+    build: ./sec-ingestor
+    restart: on-failure
+    command: uvicorn api:app --host 0.0.0.0 --port 8000 --reload
+    ports:
+      - "8000:8000"
+    depends_on:
+      qdrant:
+        condition: service_started
+    environment:
+      - QDRANT_HOST=qdrant
+      - QDRANT_PORT=6333
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - VOYAGE_API_KEY=${VOYAGE_API_KEY}
+    develop:
+      watch:
+        - action: sync+restart
+          path: ./sec-ingestor/app/api.py
+          target: /app/api.py
+    networks:
+      - fsight-network
+
+  # ─── Vue.js Frontend ──────────────────────────────────────────
+  frontend:
+    container_name: fsight-frontend
+    build: ./frontend
+    ports:
+      - "5173:5173"
+    depends_on:
+      - api
+    develop:
+      watch:
+        - action: sync
+          path: ./frontend/src
+          target: /app/src
+    networks:
+      - fsight-network
+
+  # ─── Vector Database ──────────────────────────────────────────
+  qdrant:
+    container_name: fsight-qdrant
+    image: qdrant/qdrant:latest
+    ports:
+      - "6333:6333" 
+      - "6334:6334"  
+    volumes:
+      - qdrant_data:/qdrant/storage
+    networks:
+      - fsight-network
+
+  
+
+volumes:
+  qdrant_data:   
+  docs:       
+
+networks:
+  fsight-network:
+    driver: bridge

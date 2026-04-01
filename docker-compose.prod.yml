@@ -1,0 +1,52 @@
+services:
+
+  ingestor:
+    container_name: fsight-ingestor
+    build: ./sec-ingestor
+    restart: on-failure
+    depends_on:
+      qdrant:
+        condition: service_started
+    environment:
+      - QDRANT_HOST=qdrant
+      - QDRANT_PORT=6333
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+    volumes:
+      - docs:/app/docs
+    networks:
+      - fsight-network
+
+  api:
+    container_name: fsight-api
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+    restart: always
+    ports:
+      - "80:8000"
+    depends_on:
+      qdrant:
+        condition: service_started
+    environment:
+      - QDRANT_HOST=qdrant
+      - QDRANT_PORT=6333
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - VOYAGE_API_KEY=${VOYAGE_API_KEY}
+    networks:
+      - fsight-network
+
+  qdrant:
+    container_name: fsight-qdrant
+    image: qdrant/qdrant:latest
+    volumes:
+      - qdrant_data:/qdrant/storage
+    networks:
+      - fsight-network
+
+volumes:
+  qdrant_data:
+  docs:
+
+networks:
+  fsight-network:
+    driver: bridge
