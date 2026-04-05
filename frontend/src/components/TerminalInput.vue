@@ -14,6 +14,9 @@
           @click="ticker = c"
         >{{ c }}</button>
       </div>
+      <div v-if="dates[ticker]?.length" class="ticker-years">
+        └ {{ dates[ticker].join(', ') }}
+      </div>
     </div>
 
     <div class="section query-section">
@@ -51,7 +54,7 @@
 import { ref, nextTick, watch, onMounted, onUnmounted } from 'vue'
 import { COMPANIES } from '../constants.js'
 
-const props = defineProps({ loading: Boolean })
+const props = defineProps({ loading: Boolean, dates: { type: Object, default: () => ({}) } })
 const emit = defineEmits(['search'])
 
 const companies = COMPANIES
@@ -258,6 +261,14 @@ onUnmounted(() => clearTimeout(animTimeout))
 
 .example-prefix {
   opacity: 0.5;
+}
+
+.ticker-years {
+  font-size: 11px;
+  color: var(--green-dim);
+  opacity: 0.6;
+  padding-left: 2px;
+  letter-spacing: 0.03em;
 }
 
 .lang-badge {

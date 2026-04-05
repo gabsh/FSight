@@ -1,9 +1,11 @@
 services:
 
-  # ─── SEC Ingestor ─────────────────────────────────────────────
+  # ─── Ingestor ─────────────────────────────────────────────────
   ingestor:
     container_name: fsight-ingestor
-    build: ./sec-ingestor
+    build:
+      context: ./app
+      dockerfile: Dockerfile.ingestor
     restart: on-failure
     depends_on:
       qdrant:
@@ -17,15 +19,17 @@ services:
     develop:
       watch:
         - action: sync+restart
-          path: ./sec-ingestor/app/ingestor.py
+          path: ./app/scripts/ingestor.py
           target: /app/ingestor.py
     networks:
       - fsight-network
 
-# ─── FastAPI ──────────────────────────────────────────────────
+  # ─── FastAPI ──────────────────────────────────────────────────
   api:
     container_name: fsight-api
-    build: ./sec-ingestor
+    build:
+      context: ./app
+      dockerfile: Dockerfile.api
     restart: on-failure
     command: uvicorn api:app --host 0.0.0.0 --port 8000 --reload
     ports:
@@ -41,7 +45,7 @@ services:
     develop:
       watch:
         - action: sync+restart
-          path: ./sec-ingestor/app/api.py
+          path: ./app/scripts/api.py
           target: /app/api.py
     networks:
       - fsight-network
@@ -67,18 +71,16 @@ services:
     container_name: fsight-qdrant
     image: qdrant/qdrant:latest
     ports:
-      - "6333:6333" 
-      - "6334:6334"  
+      - "6333:6333"
+      - "6334:6334"
     volumes:
       - qdrant_data:/qdrant/storage
     networks:
       - fsight-network
 
-  
-
 volumes:
-  qdrant_data:   
-  docs:       
+  qdrant_data:
+  docs:
 
 networks:
   fsight-network:

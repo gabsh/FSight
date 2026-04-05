@@ -26,6 +26,7 @@
             <div class="tags">
               <span class="tag" v-for="c in companies" :key="c">{{ c }}</span>
             </div>
+            <p>The years shown next to each company reflect the <span class="hl">filing dates</span> of the indexed 10-K reports. Since each annual report includes historical comparisons (prior years' financials, multi-year trends), information from earlier periods may also be retrievable through these documents.</p>
           </div>
 
           <div class="section">

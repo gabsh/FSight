@@ -24,6 +24,10 @@ dist/
 build/
 *.log
 
+# SEC docs cache (téléchargés par l'ingestor)
+app/docs/
+10k_docs/
+
 # OS
 Thumbs.db
 .DS_Store

@@ -1,3 +1,9 @@
+export async function getDates() {
+  const res = await fetch('/dates')
+  if (!res.ok) return {}
+  return res.json()
+}
+
 export async function search(question, ticker) {
   const res = await fetch('/search', {
     method: 'POST',

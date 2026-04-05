@@ -8,6 +8,7 @@ export default defineConfig({
     port: 5173,
     proxy: {
       '/search': 'http://api:8000',
+      '/dates':  'http://api:8000',
     },
   },
 })

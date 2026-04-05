@@ -3,5 +3,4 @@ lxml
 qdrant-client
 openai
 voyageai
-fastapi
-uvicorn[standard]
+requests

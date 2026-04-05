@@ -1,25 +1,15 @@
 import os
 import re
 import uuid
+import datetime
 import requests
 from bs4 import BeautifulSoup
 from qdrant_client.models import Distance, VectorParams, PointStruct, Filter, FieldCondition, MatchValue
 from config import QDRANT_HOST, QDRANT_PORT, COLLECTION_NAME, EMBEDDING_DIM, HEADERS, COMPANIES, embed_batch, qdrant
 
-CHUNK_SIZE    = 2000
-CHUNK_OVERLAP = 300
+CHUNK_SIZE    = 800
+CHUNK_OVERLAP = 160
 
-_NOISE_RE = re.compile(
-    r'^[\d\s\.\,\-\_\—\–\(\)]+$'
-    r'|^[A-Z][A-Z\s]{0,58}[A-Z]$'
-    r'|^[\-\_\.\*\s]{3,}$'
-)
-
-
-def is_noise(para: str) -> bool:
-    if len(para) < 30:
-        return True
-    return bool(_NOISE_RE.match(para))
 
 # ─── Étape 1 : Téléchargement des docs ────────────────────────────────────────
 
@@ -35,18 +25,26 @@ def fetch_10k_filings(cik: str) -> list[tuple[str, str, bytes]]:
     data = response.json()
     print(f"Société : {data['name']}")
 
-    filings           = data["filings"]["recent"]
-    forms             = filings["form"]
-    accession_numbers = filings["accessionNumber"]
-    primary_documents = filings["primaryDocument"]
-    filing_dates      = filings["filingDate"]
+    all_filings = {k: list(v) for k, v in data["filings"]["recent"].items()}
+    for extra in data["filings"].get("files", []):
+        url_extra  = f"https://data.sec.gov/submissions/{extra['name']}"
+        extra_data = requests.get(url_extra, headers=HEADERS, timeout=30).json()
+        for k, v in extra_data.items():
+            if k in all_filings:
+                all_filings[k].extend(v)
 
+    forms             = all_filings["form"]
+    accession_numbers = all_filings["accessionNumber"]
+    primary_documents = all_filings["primaryDocument"]
+    filing_dates      = all_filings["filingDate"]
+
+    current_year = datetime.date.today().year
     ten_k_filings = [
         (accession_numbers[i], filing_dates[i], primary_documents[i])
         for i, form in enumerate(forms)
-        if form == "10-K"
+        if form == "10-K" and 2010 <= int(filing_dates[i][:4]) <= current_year
     ]
-    print(f"  {len(ten_k_filings)} filings 10-K trouvés")
+    print(f"  {len(ten_k_filings)} filings 10-K trouvés (2010–{current_year})")
 
     results = []
     os.makedirs("docs", exist_ok=True)
@@ -80,7 +78,7 @@ def parse_and_chunk(html_content: bytes) -> list[dict]:
         tag.decompose()
 
     paragraphs = [p.strip() for p in re.split(r'\n+', soup.get_text(separator="\n", strip=True)) if p.strip()]
-    text = " ".join(p for p in paragraphs if not is_noise(p))
+    text = " ".join(paragraphs)
 
     chunks = []
     start = 0

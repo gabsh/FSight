@@ -19,12 +19,17 @@ COMPANIES = {
 }
 
 HEADERS      = {"User-Agent": "FSight fs@gmail.com"}
-VOYAGE_API_KEY = os.getenv("VOYAGE_API_KEY")
 
 _clientOpenAI = OpenAI()
-_clientVoyage  = voyageai.Client(api_key=VOYAGE_API_KEY)
-
 qdrant = QdrantClient(host=QDRANT_HOST, port=QDRANT_PORT)
+
+_clientVoyage = None
+
+def _get_voyage():
+    global _clientVoyage
+    if _clientVoyage is None:
+        _clientVoyage = voyageai.Client(api_key=os.getenv("VOYAGE_API_KEY"))
+    return _clientVoyage
 
 
 def embed(text: str) -> list[float]:
@@ -69,5 +74,5 @@ VOYAGE_RERANK_MODEL = "rerank-2.5"
 
 def rerank(question: str, candidates: list, top_n: int) -> list:
     docs = [c.payload["text"] for c in candidates]
-    result = _clientVoyage.rerank(question, docs, model=VOYAGE_RERANK_MODEL, top_k=top_n)
+    result = _get_voyage().rerank(question, docs, model=VOYAGE_RERANK_MODEL, top_k=top_n)
     return [candidates[r.index] for r in result.results]

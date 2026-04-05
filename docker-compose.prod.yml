@@ -1,9 +1,12 @@
 services:
 
+  # ─── Ingestor ─────────────────────────────────────────────────
   ingestor:
     container_name: fsight-ingestor
-    build: ./sec-ingestor
-    restart: on-failure
+    build:
+      context: ./app
+      dockerfile: Dockerfile.ingestor
+    restart: always
     depends_on:
       qdrant:
         condition: service_started
@@ -16,14 +19,13 @@ services:
     networks:
       - fsight-network
 
+  # ─── FastAPI ──────────────────────────────────────────────────
   api:
     container_name: fsight-api
     build:
-      context: .
-      dockerfile: Dockerfile.prod
+      context: ./app
+      dockerfile: Dockerfile.api
     restart: always
-    ports:
-      - "80:8000"
     depends_on:
       qdrant:
         condition: service_started
@@ -35,9 +37,27 @@ services:
     networks:
       - fsight-network
 
+  # ─── Vue.js Frontend (nginx) ───────────────────────────────────
+  frontend:
+    container_name: fsight-frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.prod
+    restart: always
+    ports:
+      - "80:80"
+    depends_on:
+      - api
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/fsight.conf:ro
+    networks:
+      - fsight-network
+
+  # ─── Vector Database ──────────────────────────────────────────
   qdrant:
     container_name: fsight-qdrant
     image: qdrant/qdrant:latest
+    restart: always
     volumes:
       - qdrant_data:/qdrant/storage
     networks:
