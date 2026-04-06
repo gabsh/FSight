@@ -46,10 +46,12 @@ services:
     restart: always
     ports:
       - "80:80"
+      - "443:443"
     depends_on:
       - api
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/conf.d/fsight.conf:ro
+      - /etc/letsencrypt:/etc/letsencrypt:ro
     networks:
       - fsight-network
 
