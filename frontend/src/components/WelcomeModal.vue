@@ -37,7 +37,7 @@
               <div class="stack-item"><span class="stack-key">llm       </span><span class="stack-val">OpenAI gpt-4o-mini</span></div>
               <div class="stack-item"><span class="stack-key">vector db </span><span class="stack-val">Qdrant</span></div>
               <div class="stack-item"><span class="stack-key">backend   </span><span class="stack-val">FastAPI (Python)</span></div>
-              <div class="stack-item"><span class="stack-key">frontend  </span><span class="stack-val">Vue 3 + Vite</span></div>
+              <div class="stack-item"><span class="stack-key">frontend  </span><span class="stack-val">Vue 3 + Vite · nginx</span></div>
               <div class="stack-item"><span class="stack-key">source    </span><span class="stack-val">SEC EDGAR API</span></div>
             </div>
           </div>
