@@ -1,4 +1,4 @@
-# FSight · [fsight.fr](https://fsight.fr)
+# FSight 
 
 A RAG pipeline that lets you ask questions about SEC 10-K annual filings for Apple, Microsoft, Google, Amazon, and Meta. Type a question, pick a company, get an answer with sources.
 
