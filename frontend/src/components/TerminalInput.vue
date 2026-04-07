@@ -40,13 +40,13 @@
       <div v-if="!question && !loading" class="example-query">
         <span class="example-prefix">e.g. </span>{{ typingText }}<span class="cursor">█</span>
       </div>
-      <div class="lang-badge">50+ languages supported</div>
     </div>
 
     <div class="hint">
       <span class="prompt-dim">fsight@sec:~$</span>
       <span class="hint-text"> press Enter to search · Shift+Enter for new line</span>
     </div>
+    <div class="lang-badge">50+ languages supported</div>
   </div>
 </template>
 
@@ -149,6 +149,8 @@ onUnmounted(() => clearTimeout(animTimeout))
   background: var(--bg-panel);
   overflow-y: auto;
   gap: 28px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
 }
 
 .section {
@@ -168,19 +170,19 @@ onUnmounted(() => clearTimeout(animTimeout))
 }
 
 .prompt {
-  color: var(--green);
-  opacity: 0.5;
+  color: var(--primary);
+  opacity: 0.65;
   white-space: nowrap;
 }
 
 .prompt-dim {
-  color: var(--green);
-  opacity: 0.25;
+  color: var(--primary);
+  opacity: 0.4;
   white-space: nowrap;
 }
 
 .label {
-  color: var(--green);
+  color: var(--primary);
   font-weight: bold;
 }
 
@@ -193,8 +195,8 @@ onUnmounted(() => clearTimeout(animTimeout))
 
 .company-btn {
   background: none;
-  border: 1px solid var(--green-dim);
-  color: var(--green-dim);
+  border: 1px solid var(--primary-dim);
+  color: var(--primary-dim);
   font-family: var(--font);
   font-size: 15px;
   padding: 3px 10px;
@@ -204,14 +206,14 @@ onUnmounted(() => clearTimeout(animTimeout))
 }
 
 .company-btn:hover {
-  border-color: var(--green);
-  color: var(--green);
+  border-color: var(--primary);
+  color: var(--primary);
 }
 
 .company-btn.active {
-  border-color: var(--green);
-  color: #0a0a0a;
-  background: var(--green);
+  border-color: var(--primary);
+  color: #1c1c1c;
+  background: var(--primary);
 }
 
 .input-row {
@@ -221,7 +223,7 @@ onUnmounted(() => clearTimeout(animTimeout))
 }
 
 .chevron {
-  color: var(--green);
+  color: var(--primary);
   padding-top: 1px;
   flex-shrink: 0;
 }
@@ -231,18 +233,18 @@ onUnmounted(() => clearTimeout(animTimeout))
   background: none;
   border: none;
   outline: none;
-  color: var(--green);
+  color: var(--primary);
   font-family: var(--font);
   font-size: 15px;
   resize: none;
   line-height: 1.5;
-  caret-color: var(--green);
+  caret-color: var(--primary);
   overflow: hidden;
   min-height: 20px;
 }
 
 .query-input::placeholder {
-  color: var(--green-dim);
+  color: var(--primary-dim);
   opacity: 0.6;
 }
 
@@ -253,8 +255,8 @@ onUnmounted(() => clearTimeout(animTimeout))
 .example-query {
   padding-left: 16px;
   font-size: 12px;
-  color: var(--green-dim);
-  opacity: 0.7;
+  color: var(--primary-dim);
+  opacity: 0.9;
   min-height: 18px;
   letter-spacing: 0.02em;
 }
@@ -265,18 +267,18 @@ onUnmounted(() => clearTimeout(animTimeout))
 
 .ticker-years {
   font-size: 11px;
-  color: var(--green-dim);
-  opacity: 0.6;
+  color: var(--primary-dim);
+  opacity: 0.8;
   padding-left: 2px;
   letter-spacing: 0.03em;
 }
 
 .lang-badge {
-  margin-top: 10px;
   font-size: 10px;
   letter-spacing: 0.08em;
-  color: var(--green-dim);
-  opacity: 0.5;
+  color: var(--primary-dim);
+  opacity: 0.65;
+  margin-top: 8px;
 }
 
 .cursor {
@@ -296,8 +298,8 @@ onUnmounted(() => clearTimeout(animTimeout))
 }
 
 .hint-text {
-  color: var(--green);
-  opacity: 0.25;
+  color: var(--primary);
+  opacity: 0.4;
   font-size: 11px;
 }
 </style>

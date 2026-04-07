@@ -8,13 +8,12 @@
         </div>
 
         <div class="modal-body">
-          <pre class="ascii">
-███████╗███████╗██╗ ██████╗ ██╗  ██╗████████╗
-██╔════╝██╔════╝██║██╔════╝ ██║  ██║╚══██╔══╝
-█████╗  ███████╗██║██║  ███╗███████║   ██║
-██╔══╝  ╚════██║██║██║   ██║██╔══██║   ██║
-██║     ███████║██║╚██████╔╝██║  ██║   ██║
-╚═╝     ╚══════╝╚═╝ ╚═════╝ ╚═╝  ╚═╝   ╚═╝</pre>
+          <pre class="ascii"><span style="color:#fde68a">███████╗███████╗██╗ ██████╗ ██╗  ██╗████████╗</span>
+<span style="color:#fbbf24">██╔════╝██╔════╝██║██╔════╝ ██║  ██║╚══██╔══╝</span>
+<span style="color:#fb923c">█████╗  ███████╗██║██║  ███╗███████║   ██║</span>
+<span style="color:#f97316">██╔══╝  ╚════██║██║██║   ██║██╔══██║   ██║</span>
+<span style="color:#ea580c">██║     ███████║██║╚██████╔╝██║  ██║   ██║</span>
+<span style="color:#c2410c">╚═╝     ╚══════╝╚═╝ ╚═════╝ ╚═╝  ╚═╝   ╚═╝</span></pre>
 
           <div class="section">
             <div class="section-title">// about</div>
@@ -26,7 +25,7 @@
             <div class="tags">
               <span class="tag" v-for="c in companies" :key="c">{{ c }}</span>
             </div>
-            <p>The years shown next to each company reflect the <span class="hl">filing dates</span> of the indexed 10-K reports. Since each annual report includes historical comparisons (prior years' financials, multi-year trends), information from earlier periods may also be retrievable through these documents.</p>
+            <p>Each annual report includes historical comparisons (prior years' financials, multi-year trends), information from earlier periods may also be retrievable through these documents.</p>
           </div>
 
           <div class="section">
@@ -39,6 +38,7 @@
               <div class="stack-item"><span class="stack-key">backend   </span><span class="stack-val">FastAPI (Python)</span></div>
               <div class="stack-item"><span class="stack-key">frontend  </span><span class="stack-val">Vue 3 + Vite · nginx</span></div>
               <div class="stack-item"><span class="stack-key">source    </span><span class="stack-val">SEC EDGAR API</span></div>
+              <div class="stack-item"><span class="stack-key">github    </span><span class="stack-val"><a class="gh-link" href="https://github.com/gabsh/FSight" target="_blank" rel="noopener">github.com/gabsh/FSight</a></span></div>
             </div>
           </div>
 
@@ -97,8 +97,8 @@ function close() {
   max-height: 88vh;
   display: flex;
   flex-direction: column;
-  border: 1px solid var(--green-dim);
-  background: #0d0d0d;
+  border: 1px solid var(--primary-dim);
+  background: var(--bg-panel);
   font-family: var(--font);
 }
 
@@ -107,23 +107,23 @@ function close() {
   justify-content: space-between;
   align-items: center;
   padding: 8px 14px;
-  background: #111;
+  background: #252525;
   border-bottom: 1px solid var(--border);
   font-size: 12px;
-  color: var(--green-dim);
+  color: var(--primary-dim);
 }
 
 .close-btn {
   background: none;
   border: none;
-  color: #444;
+  color: #888;
   cursor: pointer;
   font-size: 12px;
   font-family: var(--font);
   padding: 0;
 }
 
-.close-btn:hover { color: var(--green); }
+.close-btn:hover { color: var(--primary); }
 
 .modal-body {
   padding: 24px;
@@ -134,8 +134,6 @@ function close() {
 }
 
 .ascii {
-  color: var(--green);
-  opacity: 0.25;
   font-size: 9px;
   line-height: 1.2;
   overflow-x: auto;
@@ -149,20 +147,20 @@ function close() {
 }
 
 .section-title {
-  color: var(--green);
-  opacity: 0.45;
+  color: var(--primary);
+  opacity: 0.65;
   font-size: 11px;
   letter-spacing: 0.08em;
 }
 
 p {
-  color: var(--green);
-  opacity: 0.75;
+  color: var(--primary);
+  opacity: 0.9;
   line-height: 1.7;
   font-size: 13px;
 }
 
-.hl { color: var(--green); opacity: 1; font-weight: bold; }
+.hl { color: var(--primary); opacity: 1; font-weight: bold; }
 
 .tags {
   display: flex;
@@ -171,8 +169,8 @@ p {
 }
 
 .tag {
-  border: 1px solid var(--green-dim);
-  color: var(--green);
+  border: 1px solid var(--primary-dim);
+  color: var(--primary);
   padding: 2px 10px;
   font-size: 12px;
   letter-spacing: 0.05em;
@@ -191,17 +189,27 @@ p {
 }
 
 .stack-key {
-  color: var(--green);
-  opacity: 0.4;
+  color: var(--primary);
+  opacity: 0.6;
   white-space: pre;
   min-width: 80px;
 }
 
 .stack-val {
-  color: var(--green);
-  opacity: 0.85;
+  color: var(--primary);
+  opacity: 1;
 }
 
+.gh-link {
+  color: var(--primary);
+  opacity: 0.85;
+  text-decoration: none;
+  border-bottom: 1px solid var(--primary-dim);
+}
+
+.gh-link:hover {
+  opacity: 1;
+}
 
 .warning-section {
   border: 1px solid #5a1a1a;
@@ -226,18 +234,18 @@ p {
   display: flex;
   align-items: center;
   gap: 8px;
-  color: var(--green);
-  opacity: 0.35;
+  color: var(--primary);
+  opacity: 0.55;
   font-size: 11px;
   cursor: pointer;
 }
 
-.no-show input { accent-color: var(--green); cursor: pointer; }
+.no-show input { accent-color: var(--primary); cursor: pointer; }
 
 .enter-btn {
   background: none;
-  border: 1px solid var(--green-dim);
-  color: var(--green);
+  border: 1px solid var(--primary-dim);
+  color: var(--primary);
   font-family: var(--font);
   font-size: 13px;
   padding: 6px 16px;
@@ -246,7 +254,7 @@ p {
 }
 
 .enter-btn:hover {
-  background: var(--green);
-  color: #0a0a0a;
+  background: var(--primary);
+  color: var(--bg);
 }
 </style>

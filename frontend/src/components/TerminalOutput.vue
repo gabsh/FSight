@@ -84,6 +84,8 @@ watch(
   flex-direction: column;
   gap: 4px;
   font-size: 15px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
 }
 
 .empty {
@@ -93,7 +95,7 @@ watch(
 }
 
 .empty-msg {
-  color: var(--green);
+  color: var(--primary);
   font-style: italic;
 }
 
@@ -105,8 +107,8 @@ watch(
 }
 
 .separator {
-  color: var(--green-dim);
-  opacity: 0.4;
+  color: var(--primary-dim);
+  opacity: 0.6;
   letter-spacing: 0.02em;
   margin-bottom: 4px;
 }
@@ -118,23 +120,23 @@ watch(
 }
 
 .prompt-dim {
-  color: var(--green);
-  opacity: 0.25;
+  color: var(--primary);
+  opacity: 0.4;
   white-space: nowrap;
 }
 
 .query-echo {
-  color: var(--green);
-  opacity: 0.7;
+  color: var(--primary);
+  opacity: 0.85;
 }
 
 .ticker-echo {
-  color: var(--green);
-  opacity: 0.5;
+  color: var(--primary);
+  opacity: 0.65;
 }
 
 .pending-line {
-  color: rgba(0, 255, 136, 0.6);
+  color: rgba(255, 255, 255, 0.6);
   display: flex;
   align-items: center;
   gap: 6px;
@@ -142,6 +144,14 @@ watch(
   padding-top: 6px;
 }
 
+.cursor {
+  animation: blink 1s step-end infinite;
+  opacity: 0.6;
+}
+
+@keyframes blink {
+  50% { opacity: 0; }
+}
 
 .spinner {
   display: inline-block;
@@ -161,7 +171,7 @@ watch(
 }
 
 .result-text {
-  color: var(--green);
+  color: var(--primary);
   line-height: 1.7;
   white-space: pre-wrap;
   word-break: break-word;
@@ -176,15 +186,14 @@ watch(
 }
 
 .sources-label {
-  color: var(--green);
-  opacity: 0.35;
+  color: var(--primary);
+  opacity: 0.55;
   font-size: 13px;
 }
 
 .source-tag {
-  color: var(--green);
-  opacity: 0.4;
+  color: var(--primary);
+  opacity: 0.6;
   font-size: 13px;
 }
-
 </style>

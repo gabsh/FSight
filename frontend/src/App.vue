@@ -2,13 +2,12 @@
   <div class="window">
     <WelcomeModal v-if="showWelcome" @close="showWelcome = false" />
     <div class="titlebar">
-      <pre class="ascii-logo">
-███████╗███████╗██╗ ██████╗ ██╗  ██╗████████╗
-██╔════╝██╔════╝██║██╔════╝ ██║  ██║╚══██╔══╝
-█████╗  ███████╗██║██║  ███╗███████║   ██║
-██╔══╝  ╚════██║██║██║   ██║██╔══██║   ██║
-██║     ███████║██║╚██████╔╝██║  ██║   ██║
-╚═╝     ╚══════╝╚═╝ ╚═════╝ ╚═╝  ╚═╝   ╚═╝</pre>
+      <pre class="ascii-logo"><span style="color:#fde68a">███████╗███████╗██╗ ██████╗ ██╗  ██╗████████╗</span>
+<span style="color:#fbbf24">██╔════╝██╔════╝██║██╔════╝ ██║  ██║╚══██╔══╝</span>
+<span style="color:#fb923c">█████╗  ███████╗██║██║  ███╗███████║   ██║   </span>
+<span style="color:#f97316">██╔══╝  ╚════██║██║██║   ██║██╔══██║   ██║   </span>
+<span style="color:#ea580c">██║     ███████║██║╚██████╔╝██║  ██║   ██║   </span>
+<span style="color:#c2410c">╚═╝     ╚══════╝╚═╝ ╚═════╝ ╚═╝  ╚═╝   ╚═╝  </span></pre>
       <span class="title-sub">RAG SEC 10-K Explorer</span>
     </div>
     <div class="panels">
@@ -17,7 +16,6 @@
         :dates="dates"
         @search="handleSearch"
       />
-      <div class="divider" />
       <TerminalOutput :history="history" />
     </div>
   </div>
@@ -54,11 +52,11 @@ async function handleSearch({ question, ticker }) {
 
 <style>
 :root {
-  --green: #00ff88;
-  --green-dim: #006644;
-  --bg: #0a0a0a;
-  --bg-panel: #0d0d0d;
-  --border: #1a1a1a;
+  --primary: #ffffff;
+  --primary-dim: rgba(240,240,240,0.65);
+  --bg: #161616;
+  --bg-panel: #1c1c1c;
+  --border: #2a2a2a;
   --font: 'Courier New', Courier, monospace;
   font-size: 15px;
 }
@@ -71,9 +69,10 @@ async function handleSearch({ question, ticker }) {
   display: flex;
   flex-direction: column;
   background: var(--bg);
-  color: var(--green);
+  color: var(--primary);
   font-family: var(--font);
   font-size: 13px;
+  font-weight: 500;
 }
 
 .titlebar {
@@ -81,7 +80,7 @@ async function handleSearch({ question, ticker }) {
   align-items: center;
   justify-content: space-between;
   padding: 6px 16px;
-  background: #111;
+  background: #252525;
   border-bottom: 1px solid var(--border);
   user-select: none;
   flex-shrink: 0;
@@ -92,39 +91,22 @@ async function handleSearch({ question, ticker }) {
   font-family: var(--font);
   font-size: 5px;
   line-height: 1.2;
-  color: var(--green);
   white-space: pre;
-  opacity: 0.85;
 }
 
 .title-sub {
   font-size: 11px;
-  color: var(--green-dim);
+  color: var(--primary-dim);
   letter-spacing: 0.1em;
   white-space: nowrap;
   margin-left: auto;
-}
-
-.controls {
-  display: flex;
-  gap: 10px;
-}
-
-.ctrl {
-  font-size: 12px;
-  color: #333;
-  cursor: default;
 }
 
 .panels {
   display: flex;
   flex: 1;
   overflow: hidden;
-}
-
-.divider {
-  width: 1px;
-  background: var(--border);
-  flex-shrink: 0;
+  padding: 14px 16px;
+  gap: 14px;
 }
 </style>
