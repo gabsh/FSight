@@ -93,8 +93,8 @@ function close() {
 }
 
 .modal {
-  width: min(700px, 92vw);
-  max-height: 88vh;
+  width: 700px;
+  max-height: 90vh;
   display: flex;
   flex-direction: column;
   border: 1px solid var(--primary-dim);
@@ -131,12 +131,13 @@ function close() {
   display: flex;
   flex-direction: column;
   gap: 20px;
+  scrollbar-width: none;
 }
+.modal-body::-webkit-scrollbar { display: none; }
 
 .ascii {
   font-size: 9px;
   line-height: 1.2;
-  overflow-x: auto;
   white-space: pre;
 }
 
@@ -177,9 +178,9 @@ p {
 }
 
 .stack-grid {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px 24px;
 }
 
 .stack-item {
