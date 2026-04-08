@@ -9,7 +9,7 @@ services:
     restart: always
     depends_on:
       qdrant:
-        condition: service_started
+        condition: service_healthy
     environment:
       - QDRANT_HOST=qdrant
       - QDRANT_PORT=6333
@@ -17,7 +17,7 @@ services:
     volumes:
       - docs:/app/docs
     networks:
-      - fsight-network
+      - backend-network
 
   # ─── FastAPI ──────────────────────────────────────────────────
   api:
@@ -28,14 +28,15 @@ services:
     restart: always
     depends_on:
       qdrant:
-        condition: service_started
+        condition: service_healthy
     environment:
       - QDRANT_HOST=qdrant
       - QDRANT_PORT=6333
       - OPENAI_API_KEY=${OPENAI_API_KEY}
       - VOYAGE_API_KEY=${VOYAGE_API_KEY}
     networks:
-      - fsight-network
+      - frontend-network
+      - backend-network
 
   # ─── Vue.js Frontend (nginx) ───────────────────────────────────
   frontend:
@@ -53,7 +54,7 @@ services:
       - ./nginx/nginx.conf:/etc/nginx/conf.d/fsight.conf:ro
       - /etc/letsencrypt:/etc/letsencrypt:ro
     networks:
-      - fsight-network
+      - frontend-network
 
   # ─── Vector Database ──────────────────────────────────────────
   qdrant:
@@ -62,13 +63,21 @@ services:
     restart: always
     volumes:
       - qdrant_data:/qdrant/storage
+    healthcheck:
+      test: ["CMD-SHELL", "bash -c '</dev/tcp/localhost/6333' 2>/dev/null || exit 1"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 10s
     networks:
-      - fsight-network
+      - backend-network
 
 volumes:
   qdrant_data:
   docs:
 
 networks:
-  fsight-network:
+  frontend-network:
+    driver: bridge
+  backend-network:
     driver: bridge

@@ -9,7 +9,7 @@ services:
     restart: on-failure
     depends_on:
       qdrant:
-        condition: service_started
+        condition: service_healthy
     environment:
       - QDRANT_HOST=qdrant
       - QDRANT_PORT=6333
@@ -22,7 +22,7 @@ services:
           path: ./app/scripts/ingestor.py
           target: /app/ingestor.py
     networks:
-      - fsight-network
+      - backend-network
 
   # ─── FastAPI ──────────────────────────────────────────────────
   api:
@@ -36,7 +36,7 @@ services:
       - "8000:8000"
     depends_on:
       qdrant:
-        condition: service_started
+        condition: service_healthy
     environment:
       - QDRANT_HOST=qdrant
       - QDRANT_PORT=6333
@@ -48,7 +48,8 @@ services:
           path: ./app/scripts/api.py
           target: /app/api.py
     networks:
-      - fsight-network
+      - frontend-network
+      - backend-network
 
   # ─── Vue.js Frontend ──────────────────────────────────────────
   frontend:
@@ -64,7 +65,7 @@ services:
           path: ./frontend/src
           target: /app/src
     networks:
-      - fsight-network
+      - frontend-network
 
   # ─── Vector Database ──────────────────────────────────────────
   qdrant:
@@ -75,13 +76,21 @@ services:
       - "6334:6334"
     volumes:
       - qdrant_data:/qdrant/storage
+    healthcheck:
+      test: ["CMD-SHELL", "bash -c '</dev/tcp/localhost/6333' 2>/dev/null || exit 1"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 10s
     networks:
-      - fsight-network
+      - backend-network
 
 volumes:
   qdrant_data:
   docs:
 
 networks:
-  fsight-network:
+  frontend-network:
+    driver: bridge
+  backend-network:
     driver: bridge
