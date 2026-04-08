@@ -43,6 +43,92 @@ Run `ingestor.py` in the Docker exec section (fetches and embeds all data), then
 
 Qdrant dashboard is at `http://localhost:6333/dashboard`.
 
+## Nginx configuration (production)
+
+In production (`docker-compose.prod.yml`) nginx runs inside the `frontend` container, serving the compiled Vue app and acting as a reverse proxy in front of FastAPI.  The config lives in `nginx/nginx.conf` and is mounted into the container at `/etc/nginx/conf.d/fsight.conf`.
+
+### HTTP → HTTPS redirect (port 80)
+
+```
+server {
+    listen 80;
+    server_name fsight.fr;
+    return 301 https://$host$request_uri;
+}
+```
+
+Any plain-HTTP request is permanently redirected (HTTP 301) to the same URL over HTTPS so that all traffic is always encrypted.
+
+### HTTPS server (port 443)
+
+#### TLS / SSL
+
+```
+ssl_certificate     /etc/letsencrypt/live/fsight.fr/fullchain.pem;
+ssl_certificate_key /etc/letsencrypt/live/fsight.fr/privkey.pem;
+```
+
+The TLS certificate is issued by Let's Encrypt (via Certbot) and stored on the host.  The `/etc/letsencrypt` directory is mounted read-only into the container by `docker-compose.prod.yml`.
+
+#### Static SPA files
+
+```
+root  /usr/share/nginx/html;
+index index.html;
+
+location / {
+    try_files $uri $uri/ /index.html;
+}
+```
+
+The Vue 3 build output is copied into `/usr/share/nginx/html` during the Docker image build (multi-stage `Dockerfile.prod`).  The `try_files` directive is the standard SPA fallback: if the requested path is not a real file nginx returns `index.html`, which lets Vue Router handle client-side routing.  Without this, refreshing any non-root URL would return a 404.
+
+#### Reverse proxy — `/search`
+
+```
+location /search {
+    proxy_pass         http://api:8000/search;
+    proxy_http_version 1.1;
+
+    proxy_set_header   Host              $host;
+    proxy_set_header   X-Real-IP         $remote_addr;
+    proxy_set_header   X-Forwarded-For   $proxy_add_x_forwarded_for;
+    proxy_set_header   X-Forwarded-Proto $scheme;
+
+    proxy_pass_header  X-RateLimit-Remaining;
+
+    proxy_read_timeout    60s;
+    proxy_connect_timeout 10s;
+}
+```
+
+Requests to `/search` are forwarded to the `api` Docker service (FastAPI) on port 8000.  The browser never talks directly to FastAPI; nginx is the only publicly exposed entry point.
+
+- **`proxy_set_header` lines** — forward the original host, real client IP, forwarding chain, and the protocol (HTTPS) to the backend so it can log and reason about requests correctly.
+- **`proxy_pass_header X-RateLimit-Remaining`** — the API sets this header; nginx passes it through to the browser so the frontend can display the remaining request quota.
+- **Timeouts** — the RAG pipeline (embedding lookup + vector search + LLM call) can take several seconds, so `proxy_read_timeout` is set to 60 s and `proxy_connect_timeout` to 10 s.
+
+#### Reverse proxy — `/dates`
+
+```
+location /dates {
+    proxy_pass http://api:8000/dates;
+    ...
+}
+```
+
+Same forwarding pattern for the `/dates` endpoint, which returns the list of available 10-K filing years per ticker.
+
+#### Security headers
+
+| Header | Value | Purpose |
+|---|---|---|
+| `X-Frame-Options` | `SAMEORIGIN` | Blocks the page from being embedded in an `<iframe>` on a foreign origin (prevents clickjacking). |
+| `X-Content-Type-Options` | `nosniff` | Stops browsers from sniffing the MIME type of responses (prevents MIME-confusion attacks). |
+| `Referrer-Policy` | `strict-origin-when-cross-origin` | Sends the full `Referer` only for same-origin navigations; cross-origin requests receive only the origin. |
+
+---
+
 ## Covered companies
 
 AAPL · MSFT · GOOGL · AMZN · META
