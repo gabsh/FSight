@@ -48,10 +48,6 @@
           </div>
 
           <div class="footer">
-            <label class="no-show">
-              <input type="checkbox" v-model="dontShowAgain" />
-              <span>don't show again</span>
-            </label>
             <button class="enter-btn" @click="close">
               [ Press Enter to continue ]
             </button>
@@ -68,14 +64,13 @@ import { COMPANIES, WELCOME_SEEN_KEY } from '../constants.js'
 
 const emit = defineEmits(['close'])
 const overlayRef = ref(null)
-const dontShowAgain = ref(false)
 
 const companies = COMPANIES
 
 onMounted(() => overlayRef.value?.focus())
 
 function close() {
-  if (dontShowAgain.value) localStorage.setItem(WELCOME_SEEN_KEY, '1')
+  localStorage.setItem(WELCOME_SEEN_KEY, '1')
   emit('close')
 }
 </script>
@@ -227,21 +222,9 @@ p {
 .footer {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
   margin-top: 4px;
 }
-
-.no-show {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  color: var(--primary);
-  opacity: 0.55;
-  font-size: 11px;
-  cursor: pointer;
-}
-
-.no-show input { accent-color: var(--primary); cursor: pointer; }
 
 .enter-btn {
   background: none;
