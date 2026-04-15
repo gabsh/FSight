@@ -39,20 +39,18 @@ services:
       - backend-network
 
   # ─── Vue.js Frontend (nginx) ───────────────────────────────────
-  frontend:
-    container_name: fsight-frontend
-    build:
-      context: ./frontend
+  frontend:                                                                
+    container_name: fsight-frontend                                        
+    build:                                                                 
+      context: ./frontend                                                  
       dockerfile: Dockerfile.prod
     restart: always
     ports:
-      - "80:80"
-      - "443:443"
+      - "8082:80"  
     depends_on:
       - api
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/conf.d/fsight.conf:ro
-      - /etc/letsencrypt:/etc/letsencrypt:ro
     networks:
       - frontend-network
 
