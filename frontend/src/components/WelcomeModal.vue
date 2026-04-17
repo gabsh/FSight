@@ -60,7 +60,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import { COMPANIES, WELCOME_SEEN_KEY } from '../constants.js'
+import { COMPANIES } from '../constants.js'
 
 const emit = defineEmits(['close'])
 const overlayRef = ref(null)
@@ -70,7 +70,6 @@ const companies = COMPANIES
 onMounted(() => overlayRef.value?.focus())
 
 function close() {
-  localStorage.setItem(WELCOME_SEEN_KEY, '1')
   emit('close')
 }
 </script>

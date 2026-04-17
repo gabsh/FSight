@@ -27,9 +27,7 @@ import TerminalInput from './components/TerminalInput.vue'
 import TerminalOutput from './components/TerminalOutput.vue'
 import WelcomeModal from './components/WelcomeModal.vue'
 import { search, getDates } from './api.js'
-import { WELCOME_SEEN_KEY } from './constants.js'
-
-const showWelcome = ref(localStorage.getItem(WELCOME_SEEN_KEY) !== '1')
+const showWelcome = ref(true)
 const loading = ref(false)
 const history = ref([])
 const dates = ref({})
