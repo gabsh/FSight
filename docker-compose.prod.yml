@@ -59,6 +59,8 @@ services:
     container_name: fsight-qdrant
     image: qdrant/qdrant:latest
     restart: always
+    ports:
+      - "127.0.0.1:6333:6333"
     volumes:
       - qdrant_data:/qdrant/storage
     healthcheck:
