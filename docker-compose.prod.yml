@@ -37,22 +37,24 @@ services:
     networks:
       - frontend-network
       - backend-network
+      - proxy-network
 
   # ─── Vue.js Frontend (nginx) ───────────────────────────────────
-  frontend:                                                                
-    container_name: fsight-frontend                                        
-    build:                                                                 
-      context: ./frontend                                                  
+  frontend:
+    container_name: fsight-frontend
+    build:
+      context: ./frontend
       dockerfile: Dockerfile.prod
     restart: always
-    ports:
-      - "8082:80"  
+    expose:
+      - "80"
     depends_on:
       - api
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/conf.d/fsight.conf:ro
     networks:
       - frontend-network
+      - proxy-network
 
   # ─── Vector Database ──────────────────────────────────────────
   qdrant:
@@ -60,7 +62,7 @@ services:
     image: qdrant/qdrant:latest
     restart: always
     ports:
-      - "127.0.0.1:6333:6333"
+       - "6333"
     volumes:
       - qdrant_data:/qdrant/storage
     healthcheck:
@@ -81,3 +83,5 @@ networks:
     driver: bridge
   backend-network:
     driver: bridge
+  proxy-network:
+    external: true
