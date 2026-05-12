@@ -5,7 +5,7 @@ services:
     build:
       context: ./app
       dockerfile: Dockerfile.ingestor
-    restart: always
+    restart: no
     depends_on:
       qdrant:
         condition: service_healthy
