@@ -36,3 +36,9 @@ Thumbs.db
 .claude/
 CLAUDE.md
 stack.txt
+
+# Kubernetes - secrets (ne jamais commiter les vraies valeurs)
+k8s/secret.yaml
+
+# Kubernetes - fichiers locaux dev
+kind-config.yaml
