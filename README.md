@@ -105,7 +105,3 @@ AAPL · MSFT · GOOGL · AMZN · META
 All 10-K filings from 2010 to the current year.
 
 ---
-
-## Docs
-
-- [KUBERNETES.md](KUBERNETES.md) — concepts, commands, and workflows for local dev and production
