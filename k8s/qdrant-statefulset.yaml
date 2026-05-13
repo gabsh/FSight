@@ -19,7 +19,6 @@ spec:
           image: qdrant/qdrant:latest
           ports:
             - containerPort: 6333
-            - containerPort: 6334
           volumeMounts:
             - name: qdrant-storage
               mountPath: /qdrant/storage

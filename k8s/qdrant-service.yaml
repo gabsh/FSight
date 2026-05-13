@@ -7,10 +7,6 @@ spec:
   selector:
     app: qdrant
   ports:
-    - name: rest
-      port: 6333
+    - port: 6333
       targetPort: 6333
-    - name: grpc
-      port: 6334
-      targetPort: 6334
   type: ClusterIP

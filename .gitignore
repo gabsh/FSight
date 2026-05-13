@@ -42,3 +42,5 @@ k8s/secret.yaml
 
 # Kubernetes - fichiers locaux dev
 kind-config.yaml
+
+KUBERNETES.md
