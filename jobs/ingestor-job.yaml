@@ -1,0 +1,44 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: ingestor
+  namespace: fsight
+spec:
+  ttlSecondsAfterFinished: 300
+  template:
+    spec:
+      restartPolicy: OnFailure
+      containers:
+        - name: ingestor
+          image: gabinn/fsight-ingestor:latest
+          imagePullPolicy: Always
+          command: ["python", "ingestor.py"]
+          env:
+            - name: QDRANT_HOST
+              value: qdrant
+            - name: QDRANT_PORT
+              value: "6333"
+            - name: OPENAI_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: fsight-secrets
+                  key: OPENAI_API_KEY
+            - name: VOYAGE_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: fsight-secrets
+                  key: VOYAGE_API_KEY
+          volumeMounts:
+            - name: docs-cache
+              mountPath: /app/docs
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "200m"
+            limits:
+              memory: "1Gi"
+              cpu: "1000m"
+      volumes:
+        - name: docs-cache
+          persistentVolumeClaim:
+            claimName: ingestor-docs
