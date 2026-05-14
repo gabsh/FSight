@@ -38,6 +38,8 @@
               <div class="stack-item"><span class="stack-key">backend   </span><span class="stack-val">FastAPI (Python)</span></div>
               <div class="stack-item"><span class="stack-key">frontend  </span><span class="stack-val">Vue 3 + Vite · nginx</span></div>
               <div class="stack-item"><span class="stack-key">source    </span><span class="stack-val">SEC EDGAR API</span></div>
+              <div class="stack-item"><span class="stack-key">orchestration   </span><span class="stack-val">Kubernetes · k3s</span></div>
+              <div class="stack-item"><span class="stack-key">ci/cd     </span><span class="stack-val">GitHub Actions</span></div>
               <div class="stack-item"><span class="stack-key">github    </span><span class="stack-val"><a class="gh-link" href="https://github.com/gabsh/FSight" target="_blank" rel="noopener">github.com/gabsh/FSight</a></span></div>
             </div>
           </div>

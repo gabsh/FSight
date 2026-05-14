@@ -67,3 +67,4 @@ jobs:
             sudo kubectl apply -f k8s/
             sudo kubectl rollout restart deployment/api -n fsight
             sudo kubectl rollout restart deployment/frontend -n fsight
+            sudo k3s crictl rmi --prune

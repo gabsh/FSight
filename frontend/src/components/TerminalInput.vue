@@ -41,12 +41,6 @@
         <span class="example-prefix">e.g. </span>{{ typingText }}<span class="cursor">█</span>
       </div>
     </div>
-
-    <div class="hint">
-      <span class="prompt-dim">fsight@sec:~$</span>
-      <span class="hint-text"> press Enter to search · Shift+Enter for new line</span>
-    </div>
-    <div class="lang-badge">50+ languages supported</div>
   </div>
 </template>
 
@@ -102,7 +96,7 @@ function tick() {
     typingText.value = phrase.slice(0, charIdx)
     if (charIdx >= phrase.length) {
       erasing = true
-      animTimeout = setTimeout(tick, 1800)
+      animTimeout = setTimeout(tick, 3500)
     } else {
       animTimeout = setTimeout(tick, 50)
     }

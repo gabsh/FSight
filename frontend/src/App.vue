@@ -8,7 +8,6 @@
 <span style="color:#f97316">██╔══╝  ╚════██║██║██║   ██║██╔══██║   ██║   </span>
 <span style="color:#ea580c">██║     ███████║██║╚██████╔╝██║  ██║   ██║   </span>
 <span style="color:#c2410c">╚═╝     ╚══════╝╚═╝ ╚═════╝ ╚═╝  ╚═╝   ╚═╝  </span></pre>
-      <span class="title-sub">RAG SEC 10-K Explorer</span>
     </div>
     <div class="panels">
       <TerminalInput
