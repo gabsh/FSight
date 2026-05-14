@@ -24,7 +24,7 @@ services:
     networks:
       - backend-network
 
-  # ─── FastAPI ──────────────────────────────────────────────────
+  # ─── FastAPI ─────────────────────────────────────────────────
   api:
     container_name: fsight-api
     build:
