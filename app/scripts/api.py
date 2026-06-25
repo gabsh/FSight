@@ -4,7 +4,7 @@ from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
-from pydantic import BaseModel
+from pydantic import BaseModel, Field, field_validator
 from slowapi import Limiter
 from slowapi.middleware import SlowAPIMiddleware
 from slowapi.util import get_remote_address
@@ -19,9 +19,9 @@ app.state.limiter = limiter
 app.add_middleware(SlowAPIMiddleware)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_origins=["https://fsight.fr", "https://www.fsight.fr"],
+    allow_methods=["GET", "POST"],
+    allow_headers=["Content-Type"],
     expose_headers=[],
 )
 
@@ -34,8 +34,16 @@ async def rate_limit_handler(request: Request, exc: RateLimitExceeded):
 
 
 class SearchRequest(BaseModel):
-    question: str
+    question: str = Field(..., min_length=1, max_length=2000)
     ticker: str | None = None
+
+    @field_validator("ticker")
+    @classmethod
+    def validate_ticker(cls, v):
+        valid = set(COMPANIES.keys())
+        if v is not None and v not in valid:
+            raise ValueError(f"ticker must be one of {sorted(valid)}")
+        return v
 
 
 @lru_cache(maxsize=1)
