@@ -19,7 +19,7 @@ app.state.limiter = limiter
 app.add_middleware(SlowAPIMiddleware)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://fsight.fr", "https://www.fsight.fr"],
+    allow_origins=["https://www.fsight.fr"],
     allow_methods=["GET", "POST"],
     allow_headers=["Content-Type"],
     expose_headers=[],
