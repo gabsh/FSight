@@ -4,3 +4,4 @@ voyageai
 fastapi
 uvicorn[standard]
 slowapi
+prometheus-fastapi-instrumentator
