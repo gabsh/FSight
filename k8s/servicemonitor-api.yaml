@@ -6,6 +6,7 @@ metadata:
   labels:
     release: kube-prometheus-stack
 spec:
+  jobLabel: app
   namespaceSelector:
     matchNames:
       - fsight
