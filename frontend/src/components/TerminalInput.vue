@@ -37,16 +37,22 @@
           @input="autoResize"
         />
       </div>
-      <div v-if="!question && !loading" class="example-query">
-        <span class="example-prefix">e.g. </span>{{ typingText }}<span class="cursor">█</span>
+      <div v-if="!question && !loading" class="example-list">
+        <button
+          v-for="(ex, i) in examples"
+          :key="i"
+          type="button"
+          class="example-item"
+          @click="useExample(ex)"
+        ><span class="example-prefix">e.g. </span>{{ ex }}</button>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, nextTick, watch, onMounted, onUnmounted } from 'vue'
-import { COMPANIES } from '../constants.js'
+import { computed, nextTick, ref } from 'vue'
+import { COMPANIES, TICKER_EXAMPLES } from '../constants.js'
 
 const props = defineProps({ loading: Boolean, dates: { type: Object, default: () => ({}) } })
 const emit = defineEmits(['search'])
@@ -55,6 +61,8 @@ const companies = COMPANIES
 const ticker = ref('AAPL')
 const question = ref('')
 const textareaRef = ref(null)
+
+const examples = computed(() => TICKER_EXAMPLES[ticker.value] || [])
 
 function submit() {
   const q = question.value.trim()
@@ -71,67 +79,13 @@ function autoResize() {
   el.style.height = el.scrollHeight + 'px'
 }
 
-const EXAMPLES = [
-  "What were Apple's total revenues in 2023?",
-  "How many employees does Meta have?",
-  "What risks does Amazon highlight in its 10-K?",
-  "What is Microsoft's R&D spending?",
-  "What are Google's main sources of revenue?",
-]
-
-const typingText = ref('')
-let animTimeout = null
-let phraseIdx = 0
-let charIdx = 0
-let erasing = false
-
-function tick() {
-  if (question.value || props.loading) {
-    typingText.value = ''
-    return
-  }
-  const phrase = EXAMPLES[phraseIdx]
-  if (!erasing) {
-    charIdx++
-    typingText.value = phrase.slice(0, charIdx)
-    if (charIdx >= phrase.length) {
-      erasing = true
-      animTimeout = setTimeout(tick, 3500)
-    } else {
-      animTimeout = setTimeout(tick, 50)
-    }
-  } else {
-    charIdx--
-    typingText.value = phrase.slice(0, charIdx)
-    if (charIdx <= 0) {
-      erasing = false
-      phraseIdx = (phraseIdx + 1) % EXAMPLES.length
-      animTimeout = setTimeout(tick, 400)
-    } else {
-      animTimeout = setTimeout(tick, 28)
-    }
-  }
+function useExample(text) {
+  question.value = text
+  nextTick(() => {
+    autoResize()
+    textareaRef.value?.focus()
+  })
 }
-
-function restartAnim() {
-  clearTimeout(animTimeout)
-  charIdx = 0
-  erasing = false
-  typingText.value = ''
-  animTimeout = setTimeout(tick, 600)
-}
-
-watch(() => question.value, (val) => {
-  if (!val && !props.loading) restartAnim()
-  else { clearTimeout(animTimeout); typingText.value = '' }
-})
-
-watch(() => props.loading, (val) => {
-  if (!val && !question.value) restartAnim()
-})
-
-onMounted(() => { animTimeout = setTimeout(tick, 900) })
-onUnmounted(() => clearTimeout(animTimeout))
 </script>
 
 <style scoped>
@@ -246,13 +200,31 @@ onUnmounted(() => clearTimeout(animTimeout))
   opacity: 0.4;
 }
 
-.example-query {
+.example-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
   padding-left: 16px;
+}
+
+.example-item {
+  background: none;
+  border: none;
+  font-family: var(--font);
+  text-align: left;
+  padding: 2px 0;
   font-size: 12px;
   color: var(--primary-dim);
   opacity: 0.9;
-  min-height: 18px;
   letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: opacity 0.1s, color 0.1s;
+}
+
+.example-item:hover {
+  opacity: 1;
+  color: var(--primary);
+  text-decoration: underline;
 }
 
 .example-prefix {
@@ -273,15 +245,6 @@ onUnmounted(() => clearTimeout(animTimeout))
   color: var(--primary-dim);
   opacity: 0.65;
   margin-top: 8px;
-}
-
-.cursor {
-  animation: blink 1s step-end infinite;
-  opacity: 0.6;
-}
-
-@keyframes blink {
-  50% { opacity: 0; }
 }
 
 .hint {
