@@ -52,9 +52,9 @@ Question
   │
   ├─► Qdrant ANN search ──► top 20 candidates
   │
-  ├─► Voyage AI rerank-2.5 ──► top 6 chunks
+  ├─► Voyage AI rerank-3 ──► top 6 chunks
   │
-  └─► GPT-4o-mini ──► Answer + sources
+  └─► GPT-6-luna ──► Answer + sources
 ```
 
 **Ingestion pipeline (run once):**
@@ -74,8 +74,8 @@ SEC EDGAR HTML
 | Layer | Technology |
 |---|---|
 | **Embeddings** | OpenAI `text-embedding-3-small` |
-| **Reranker** | Voyage AI `rerank-2.5` |
-| **LLM** | GPT-4o-mini |
+| **Reranker** | Voyage AI `rerank-3` |
+| **LLM** | GPT-6-luna |
 | **Vector DB** | Qdrant |
 | **Backend** | FastAPI + slowapi (rate limiting 40 req/day) |
 | **Frontend** | Vue 3 + Vite, served by nginx |

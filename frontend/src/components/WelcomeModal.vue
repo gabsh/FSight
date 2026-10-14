@@ -32,8 +32,8 @@
             <div class="section-title">// stack</div>
             <div class="stack-grid">
               <div class="stack-item"><span class="stack-key">embeddings</span><span class="stack-val">OpenAI text-embedding-3-small</span></div>
-              <div class="stack-item"><span class="stack-key">reranker  </span><span class="stack-val">Voyage AI rerank-2.5</span></div>
-              <div class="stack-item"><span class="stack-key">llm       </span><span class="stack-val">OpenAI gpt-4o-mini</span></div>
+              <div class="stack-item"><span class="stack-key">reranker  </span><span class="stack-val">Voyage AI rerank-3</span></div>
+              <div class="stack-item"><span class="stack-key">llm       </span><span class="stack-val">OpenAI gpt-6-luna</span></div>
               <div class="stack-item"><span class="stack-key">vector db </span><span class="stack-val">Qdrant</span></div>
               <div class="stack-item"><span class="stack-key">backend   </span><span class="stack-val">FastAPI (Python)</span></div>
               <div class="stack-item"><span class="stack-key">frontend  </span><span class="stack-val">Vue 3 + Vite · nginx</span></div>

@@ -15,5 +15,5 @@ spec:
       app: fsight-api
   endpoints:
     - port: http
-      path: /metrics
+      path: /metrics #dit a prometheus de scrapper ce service
       interval: 30s

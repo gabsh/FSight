@@ -41,7 +41,7 @@ def embed_batch(texts: list[str]) -> list[list[float]]:
     return [item.embedding for item in response.data]
 
 
-LLM_MODEL = "gpt-4o-mini"
+LLM_MODEL = "gpt-6-luna"
 
 SYSTEM_PROMPT = (
     "You are a financial analyst assistant specializing in SEC 10-K filings. "
@@ -69,7 +69,7 @@ def generate(question: str, chunks: list[dict]) -> str:
     return response.choices[0].message.content
 
 
-VOYAGE_RERANK_MODEL = "rerank-2.5"
+VOYAGE_RERANK_MODEL = "rerank-3"
 
 
 def rerank(question: str, candidates: list, top_n: int) -> list:
