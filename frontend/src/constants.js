@@ -7,7 +7,7 @@ export const TICKER_EXAMPLES = {
     "What risks does Apple highlight around supply chain concentration?",
   ],
   MSFT: [
-    "How much did Microsoft spend on R&D last year?",
+    "How much did Microsoft spend on R&D in 2025?",
     "What are Microsoft's main cloud computing risks?",
   ],
   GOOGL: [
